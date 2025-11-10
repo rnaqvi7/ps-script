@@ -1,3 +1,5 @@
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
 F21P1STR00-1# isi auth roles create CSMAdminRole --description "Dell CSM Admin Role" --zone System
 F21P1STR00-1# isi auth roles modify CSMAdminRole --zone System --add-priv-read ISI_PRIV_LOGIN_PAPI --add-priv-read ISI_PRIV_IFS_RESTORE --add-priv-read ISI_PRIV_NS_IFS_ACCESS --add-priv-read ISI_PRIV_IFS_BACKUP --add-priv-read ISI_PRIV_STATISTICS
 F21P1STR00-1# isi auth roles modify CSMAdminRole --zone System --add-priv-write ISI_PRIV_NFS  --add-priv-write ISI_PRIV_QUOTA  --add-priv-write ISI_PRIV_SNAPSHOT --add-priv-write ISI_PRIV_SYNCIQ
