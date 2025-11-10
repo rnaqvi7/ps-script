@@ -13,9 +13,7 @@ root@f21p1cmp01:~/powerscale/csi-powerscale/samples/secret# kubectl -n powerscal
 kubectl create -f empty-secret.yaml -n powerscale
 kubectl -n powerscale get secrets
 
- cd dell-csi-helm-installer && wget -O my-isilon-settings.yaml https://raw.githubusercontent.com/dell/helm-charts/csi-isilon-2.14.0/charts/csi-isilon/values.yaml &&
-
-./csi-install.sh --namespace powerscale --values  my-isilon-settings.yaml
+cd dell-csi-helm-installer &&  wget -O my-isilon-settings.yaml https://raw.githubusercontent.com/dell/helm-charts/csi-isilon-2.14.0/charts/csi-isilon/values.yaml && ./csi-install.sh --namespace powerscale --values  my-isilon-settings.yaml
 
 root@f21p1cmp01:~/powerscale/csi-powerscale/samples/persistentvolumeclaim# cat pvc.yaml
 apiVersion: v1
