@@ -6,3 +6,59 @@ F21P1STR00-1# isi auth user create csmadmin --password "csmadmin123$"
 F21P1STR00-1# isi auth roles modify CSMAdminRole --add-user csmadmin
 isi_gconfig -t web-config
 isi_gconfig -t web-config auth_basic=true
+
+
+root@f21p1cmp01:~/powerscale/csi-powerscale/samples/secret# kubectl create secret generic isilon-creds -n powerscale --from-file=config=secret.yaml
+root@f21p1cmp01:~/powerscale/csi-powerscale/samples/secret# kubectl -n powerscale get secrets
+kubectl create -f empty-secret.yaml -n powerscale
+kubectl -n powerscale get secrets
+
+ cd dell-csi-helm-installer && wget -O my-isilon-settings.yaml https://raw.githubusercontent.com/dell/helm-charts/csi-isilon-2.14.0/charts/csi-isilon/values.yaml &&
+
+./csi-install.sh --namespace powerscale --values  my-isilon-settings.yaml
+
+root@f21p1cmp01:~/powerscale/csi-powerscale/samples/persistentvolumeclaim# cat pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-az02
+# Uncomment below 4 lines to set quota limit parameters
+#  labels:
+#    pvcSoftLimit: "10"
+#    pvcAdvisoryLimit: "50"
+#    pvcSoftGracePrd : "85400"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: powerscale-az02 
+
+
+
+
+root@f21p1cmp01:~/powerscale# cat  pod-powerscale.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-az02
+  namespace: default
+spec:
+  containers:
+    - name: ubi
+      image: registry.access.redhat.com/ubi9/ubi
+      command: ["bash", "-c"]
+      args:
+        - |
+          while true; do
+            touch /data/file-$(date +%s);
+            sleep 20;
+          done;
+      volumeMounts:
+        - name: data
+          mountPath: /data
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: pvc-az02
